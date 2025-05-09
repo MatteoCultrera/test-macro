@@ -19,7 +19,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "600.0.0-latest"),
+        .package(url: "https://github.com/sjavora/swift-syntax-xcframeworks.git", from: "600.0.1"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -28,15 +28,14 @@ let package = Package(
         .macro(
             name: "test-macroMacros",
             dependencies: [
-                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+                .product(name: "SwiftSyntaxWrapper", package: "swift-syntax-xcframeworks"),
             ]
         ),
 
         // Library that exposes a macro as part of its API, which is used in client programs.
         .target(name: "test-macro", dependencies: ["test-macroMacros"]),
 
-        // A client of the library, which is able to use the macro in its own code.
+        // A client of the library, type: .dynamic,  which is able to use the macro in its own code.
         .executableTarget(name: "test-macroClient", dependencies: ["test-macro"]),
 
         // A test target used to develop the macro implementation.
@@ -44,7 +43,7 @@ let package = Package(
             name: "test-macroTests",
             dependencies: [
                 "test-macroMacros",
-                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxWrapper", package: "swift-syntax-xcframeworks"),
             ]
         ),
     ]
